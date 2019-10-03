@@ -59,6 +59,7 @@ if __name__ == "__main__":
     argparse_add_verbosity(parser)
     argparse_add_verbosity(init_parser)
     argparse_add_verbosity(key_parser)
+    argparse_add_verbosity(auth_parser)
 
     key_parser.add_argument("key_command", choices=valid_keys,
                             help="The key command to use")
