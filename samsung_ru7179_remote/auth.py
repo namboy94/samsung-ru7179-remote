@@ -21,6 +21,7 @@ import ssl
 import time
 import json
 import base64
+import logging
 import websocket
 from threading import Thread
 from samsung_ru7179_remote.config import load_config, write_config
@@ -33,6 +34,7 @@ def authenticate():
     """
     config = load_config()
     config["token"] = ""
+    logger = logging.getLogger("samsung-remote:auth")
 
     app_name = config["remote_name"]
     app_name = str(base64.b64encode(app_name.encode("utf-8")), "utf-8")
@@ -40,12 +42,14 @@ def authenticate():
         .format(config["tv_ip"], app_name)
 
     def on_message(socket: websocket.WebSocket, message: str):
+        logger.info("Received token")
         config["token"] = json.loads(message)["data"]["token"]
         socket.close()
 
     def on_open(socket: websocket.WebSocket):
         def run(*_):
             start = time.time()
+            logger.info("Requesting authentication")
             socket.send("Hello!")
             while time.time() - start < 10 and config["token"] == "":
                 time.sleep(1)
