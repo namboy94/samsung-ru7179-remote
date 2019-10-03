@@ -1,0 +1,72 @@
+#!/usr/bin/env python
+"""LICENSE
+Copyright 2019 Hermann Krumrey <hermann@krumreyh.com>
+
+This file is part of samsung-ru7179-remote.
+
+samsung-ru7179-remote is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+samsung-ru7179-remote is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with samsung-ru7179-remote.  If not, see <http://www.gnu.org/licenses/>.
+LICENSE"""
+
+import argparse
+from puffotter.init import cli_start, argparse_add_verbosity
+from puffotter.prompt import prompt
+from puffotter.os import makedirs
+from samsung_ru7179_remote import sentry_dsn
+from samsung_ru7179_remote.config import config_dir, write_config
+from samsung_ru7179_remote.commands import valid_keys
+from samsung_ru7179_remote.auth import authenticate
+from samsung_ru7179_remote.key import execute_keypress
+
+
+def main(args: argparse.Namespace):
+    """
+    The samsung-ru7179-remote main method
+    :return: None
+    """
+    if args.mode == "init":
+        makedirs(config_dir)
+        write_config({
+            "tv_ip": prompt("TV IP Address", required=True),
+            "remote_name": prompt("Remote Name", default="Samsung Remote"),
+            "token": ""
+        })
+
+    elif args.mode == "authenticate":
+        authenticate()
+    elif args.mode == "key":
+        execute_keypress(args.key_command)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+
+    mode_parser = parser.add_subparsers(dest="mode", required=True)
+    init_parser = mode_parser.add_parser("init")
+    key_parser = mode_parser.add_parser("key")
+    auth_parser = mode_parser.add_parser("authenticate")
+
+    argparse_add_verbosity(parser)
+    argparse_add_verbosity(init_parser)
+    argparse_add_verbosity(key_parser)
+
+    key_parser.add_argument("key_command", choices=valid_keys,
+                            help="The key command to use")
+
+    cli_start(
+        main,
+        parser,
+        "Thanks for using samsung-ru7179-remote!",
+        "samsung_ru7179_remote",
+        sentry_dsn
+    )

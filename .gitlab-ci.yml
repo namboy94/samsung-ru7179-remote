@@ -1,0 +1,67 @@
+stages:
+  - mirror
+  - test
+  - stats
+  - release
+
+default:
+  image: namboy94/ci-docker-environment:0.8.0
+  before_script:
+    - echo "$SERVER_ACCESS_KEY" > ~/.ssh/id_rsa
+    - chmod 0600 ~/.ssh/id_rsa
+
+github_mirror:
+  stage: mirror
+  tags: [docker]
+  only: [master, develop]
+  before_script:
+    - echo "$GITHUB_SSH_KEY" > ~/.ssh/id_rsa
+    - chmod 0600 ~/.ssh/id_rsa
+  script:
+    - git-mirror-pusher git@github.com:namboy94/samsung-ru7179-remote.git
+      master develop
+
+stylecheck:
+  stage: test
+  tags: [docker]
+  script:
+    - python-codestyle-check
+
+type_check:
+  stage: test
+  tags: [docker]
+  script:
+    - python-static-type-check
+
+unittest:
+  stage: test
+  tags: [docker]
+  script:
+    - python-unittest
+
+gitstats:
+  stage: stats
+  tags: [docker]
+  script:
+    - gitstats-gen
+
+docgen:
+  stage: stats
+  tags: [docker]
+  script:
+    - sphinx-docgen
+
+release_upload:
+  stage: release
+  only: [master]
+  tags: [docker]
+  script:
+    - github-release-upload $(cat version) "$(changelog-reader)"
+    - gitlab-release-upload $(cat version) "$(changelog-reader)"
+
+pypi_upload:
+  stage: release
+  only: [master]
+  tags: [docker]
+  script:
+    - pypi-upload
