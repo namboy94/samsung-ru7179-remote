@@ -1,0 +1,70 @@
+#!/usr/bin/env python
+"""LICENSE
+Copyright 2019 Hermann Krumrey <hermann@krumreyh.com>
+
+This file is part of samsung-ru7179-remote.
+
+samsung-ru7179-remote is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+samsung-ru7179-remote is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with samsung-ru7179-remote.  If not, see <http://www.gnu.org/licenses/>.
+LICENSE"""
+
+import argparse
+from samsung_ru7179_remote.printer import print_remaining_support_levels
+from samsung_ru7179_remote.setters import set_support_level
+
+
+def main():
+    """
+    The xdcc-dl main method
+    :return: None
+    """
+    parser = argparse.ArgumentParser()
+    mode_parser = parser.add_subparsers(required=True, dest="mode")
+    list_parser = mode_parser.add_parser("list")
+    set_parser = mode_parser.add_parser("set")
+
+    # List Mode
+    list_mode_parser = list_parser.add_subparsers(
+        required=True, dest="list_mode"
+    )
+    remaining_parser = list_mode_parser.add_parser("remaining")
+    remaining_parser.add_argument("--no-byleth", action="store_true",
+                                  help="Hides support levels with Byleth")
+    remaining_parser.add_argument("--multi-line", action="store_true",
+                                  help="Uses multiple lines per character")
+
+    # Set Mode
+    set_mode_parser = set_parser.add_subparsers(required=True, dest="set_mode")
+    set_support_parser = set_mode_parser.add_parser("support")
+    set_support_parser.add_argument("char_one", help="The first character")
+    set_support_parser.add_argument("char_two", help="The second character")
+    set_support_parser.add_argument(
+        "support_level", help="The support level",
+        choices={"X", "C", "C+", "B", "B+", "A", "A+", "S"}
+    )
+
+    args = parser.parse_args()
+
+    if args.mode == "list":
+        if args.list_mode == "remaining":
+            print_remaining_support_levels(args.no_byleth, args.multi_line)
+    elif args.mode == "set":
+        if args.set_mode == "support":
+            set_support_level(args.char_one, args.char_two, args.support_level)
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("Thanks for using samsung-ru7179-remote!")
