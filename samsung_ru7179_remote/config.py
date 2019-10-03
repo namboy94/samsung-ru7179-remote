@@ -17,7 +17,42 @@ You should have received a copy of the GNU General Public License
 along with samsung-ru7179-remote.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
-sentry_dsn = ""
+import os
+import json
+from typing import Dict
+
+config_dir = os.path.join(
+    os.path.expanduser("~"),
+    ".config/samsung-ru7179-remote"
+)
 """
-The Sentry DSN used for exception logging
+The config directory path
 """
+
+config_file = os.path.join(config_dir, "config.json")
+"""
+The config file path
+"""
+
+
+def load_config() -> Dict[str, str]:
+    """
+    Loads the config
+    :return: The config
+    """
+    if not os.path.isfile(config_file):
+        print("Configuration invalid. Please run the init command")
+        exit(1)
+
+    with open(config_file, "r") as f:
+        return json.load(f)
+
+
+def write_config(config: Dict[str, str]):
+    """
+    Writes the config
+    :param config: The config to write
+    :return: None
+    """
+    with open(config_file, "w") as f:
+        json.dump(config, f)

@@ -39,7 +39,8 @@ if __name__ == "__main__":
         scripts=list(map(lambda x: os.path.join("bin", x), os.listdir("bin"))),
         install_requires=[
             "typing",
-            "websockets"
+            "puffotter",
+            "websocket_client"
         ],
         test_suite='nose.collector',
         tests_require=['nose'],

@@ -17,7 +17,38 @@ You should have received a copy of the GNU General Public License
 along with samsung-ru7179-remote.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
-sentry_dsn = ""
+
+valid_keys = {
+    "POWER",
+    "UP",
+    "DOWN",
+    "RIGHT",
+    "LEFT",
+    "ENTER",
+    "RETURN",
+    "POWER",
+    "MENU",
+    "SOURCE",
+    "HDMI1",
+    "HDMI2",
+    "HDMI3",
+    "PAUSE",
+    "PLAY",
+    "STOP",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "0",
+    "VOLUP",
+    "VOLDOWN",
+    "MUTE"
+}
 """
-The Sentry DSN used for exception logging
+Valid keypresses
 """
