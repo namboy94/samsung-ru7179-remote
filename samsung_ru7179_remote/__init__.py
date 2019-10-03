@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with samsung-ru7179-remote.  If not, see <http://www.gnu.org/licenses/>.
 LICENSE"""
 
-sentry_dsn = ""
+sentry_dsn = "https://2a4227e5f0b644adab18a91adc8e57b1@sentry.namibsun.net/12"
 """
 The Sentry DSN used for exception logging
 """
