@@ -24,9 +24,9 @@ from puffotter.prompt import prompt
 from puffotter.os import makedirs
 from samsung_ru7179_remote import sentry_dsn
 from samsung_ru7179_remote.config import config_dir, write_config
-from samsung_ru7179_remote.commands import valid_keys
-from samsung_ru7179_remote.auth import authenticate
-from samsung_ru7179_remote.key import execute_keypress
+from samsung_ru7179_remote.commands import valid_keys, shortcuts
+from samsung_ru7179_remote.control import execute_keypress, list_apps, \
+    start_app
 
 
 def main(args: argparse.Namespace):
@@ -42,27 +42,30 @@ def main(args: argparse.Namespace):
             "token": ""
         })
 
-    elif args.mode == "authenticate":
-        authenticate()
     elif args.mode == "key":
-        execute_keypress(args.key_command)
+        for key_command in args.key_commands:
+            for part in shortcuts.get(key_command, [key_command]):
+                execute_keypress(part)
+    elif args.mode == "app-list":
+        for app in list_apps():
+            print(app)
+    elif args.mode == "app-start":
+        start_app(args.app)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     mode_parser = parser.add_subparsers(dest="mode", required=True)
-    init_parser = mode_parser.add_parser("init")
-    key_parser = mode_parser.add_parser("key")
-    auth_parser = mode_parser.add_parser("authenticate")
+    parsers = {}
 
-    argparse_add_verbosity(parser)
-    argparse_add_verbosity(init_parser)
-    argparse_add_verbosity(key_parser)
-    argparse_add_verbosity(auth_parser)
+    for key in ["init", "key", "app-start", "app-list"]:
+        parsers[key] = mode_parser.add_parser(key)
+        argparse_add_verbosity(parsers[key])
 
-    key_parser.add_argument("key_command", choices=valid_keys,
-                            help="The key command to use")
+    parsers["key"].add_argument("key_commands", nargs="+", choices=valid_keys,
+                                help="The key command to use")
+    parsers["app-start"].add_argument("app", help="The app to start")
 
     cli_start(
         main,

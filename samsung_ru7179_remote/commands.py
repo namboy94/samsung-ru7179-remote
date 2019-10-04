@@ -19,22 +19,15 @@ LICENSE"""
 
 
 valid_keys = {
+    # Power Keys
     "POWER",
-    "UP",
-    "DOWN",
-    "RIGHT",
-    "LEFT",
-    "ENTER",
-    "RETURN",
-    "POWER",
-    "MENU",
+
+    # Sources
     "SOURCE",
-    "HDMI1",
-    "HDMI2",
-    "HDMI3",
-    "PAUSE",
-    "PLAY",
-    "STOP",
+    "HDMI",
+    "TV",
+
+    # Numbers
     "1",
     "2",
     "3",
@@ -45,10 +38,58 @@ valid_keys = {
     "8",
     "9",
     "0",
+
+    # Channels
+    "CHUP",
+    "CHDOWN",
+    "PRECH",
+    "CH_LIST",
+
+    # Volume Keys
     "VOLUP",
     "VOLDOWN",
-    "MUTE"
+    "MUTE",
+
+    # Direction Keys
+    "UP",
+    "DOWN",
+    "RIGHT",
+    "LEFT",
+    "ENTER",
+    "RETURN",
+
+    # Media Keys
+    "REWIND",
+    "STOP",
+    "PAUSE",
+    "PLAY",
+    "FF",
+
+    # Color Keys
+    "GREEN",
+    "YELLOW",
+    "CYAN",
+    "RED",
+    
+    # Menus
+    "MENU",
+    "HOME",
+    "GUIDE"
 }
 """
 Valid keypresses
 """
+
+
+shortcuts = {
+    "HDMI1": ["SOURCE", "LEFT", "LEFT", "LEFT", "RIGHT", "ENTER"],
+    "HDMI2": ["SOURCE", "LEFT", "LEFT", "LEFT", "RIGHT", "RIGHT", "ENTER"],
+    "HDMI3":
+        ["SOURCE", "LEFT", "LEFT", "LEFT", "RIGHT", "RIGHT", "RIGHT", "ENTER"]
+}
+"""
+Custom commands that use multiple commands
+"""
+
+for shortcut in shortcuts:
+    valid_keys.add(shortcut)
