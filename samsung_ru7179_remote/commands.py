@@ -82,10 +82,24 @@ Valid keypresses
 
 
 shortcuts = {
-    "HDMI1": ["SOURCE", "LEFT", "LEFT", "LEFT", "RIGHT", "ENTER"],
-    "HDMI2": ["SOURCE", "LEFT", "LEFT", "LEFT", "RIGHT", "RIGHT", "ENTER"],
-    "HDMI3":
-        ["SOURCE", "LEFT", "LEFT", "LEFT", "RIGHT", "RIGHT", "RIGHT", "ENTER"]
+    "HDMI1": [
+        "SOURCE", "SOURCE",
+        "LEFT", "LEFT", "LEFT",
+        "RIGHT",
+        "ENTER"
+    ],
+    "HDMI2": [
+        "SOURCE", "SOURCE",
+        "LEFT", "LEFT", "LEFT",
+        "RIGHT", "RIGHT",
+        "ENTER"
+    ],
+    "HDMI3": [
+        "SOURCE", "SOURCE",
+        "LEFT", "LEFT", "LEFT",
+        "RIGHT", "RIGHT", "RIGHT",
+        "ENTER"
+    ]
 }
 """
 Custom commands that use multiple commands
