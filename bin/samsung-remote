@@ -56,7 +56,7 @@ def main(args: argparse.Namespace):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    mode_parser = parser.add_subparsers(dest="mode", required=True)
+    mode_parser = parser.add_subparsers(dest="mode")
     parsers = {}
 
     for key in ["init", "key", "app-start", "app-list"]:
